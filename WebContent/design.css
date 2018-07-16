@@ -1,0 +1,39 @@
+body {
+	background-color: #c7efe5e0;
+}
+input {
+	background-color: inherit;
+}
+aside{
+	position: absolute;
+	right: 0;
+	top: 0;
+	margin: 3ex;
+}
+
+#ChatDiv{
+    position:relative;
+    overflow:auto;
+    height:75%;
+    width: fit-content;
+    width: -moz-fit-content;
+    max-width: 75%;
+    border: 0.25ex inset;
+	border-radius: 1.5ex;
+}
+#ChatDiv div{
+    overflow-y: auto;
+    height:75%;
+    width: 100%;
+}
+#ChatDiv table{
+	width: 100%;
+}
+.inChatImg{
+	height: 10%;
+	width: 10%;
+}
+.inChatImg:hover{
+	height: 50%;
+	width: 50%;
+}

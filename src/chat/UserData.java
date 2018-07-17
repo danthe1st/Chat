@@ -13,6 +13,7 @@ public class UserData{
 	private boolean admin;
 	//@XmlElement(name="ip")
 	private String ip;
+	@XmlElement(name="lastMsg")
 	private long lastMsg=0;
 	@XmlElement(name="numFiles")
 	private int numFiles=0;

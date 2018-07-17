@@ -61,4 +61,10 @@ public class AutoDelMap<K, V> extends HashMap<K, V> {
 			put(k, v);
 		});
 	}
+	@Override
+	public void clear() {
+		for (K toRemove : keySet()) {
+			remove(toRemove);
+		}
+	}
 }

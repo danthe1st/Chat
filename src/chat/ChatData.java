@@ -31,7 +31,7 @@ public class ChatData implements Serializable{
 	private static final String usersDir="users/";
 	private static final String chatsSuffix=".chat";
 	private static final String userSuffix=".xml";
-	public static String pathname="chat/Settings";
+	public static final String pathname="chat/Settings";
 	
 	private ChatData(ServletContext context) {
 		resetActiveChats();

@@ -184,6 +184,9 @@ public class ChatData{
 		if (!hasUser(username)) {
 			return false;
 		}
+		if (!ChatProperties.isAdminAllowed()) {
+			return false;
+		}
 		UserData user=getUser(username);
 		return user.isAdmin();
 	}

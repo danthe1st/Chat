@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import chat.ChatData;
+import chat.utils.ChatProperties;
 import chat.utils.Constants;
 import chat.utils.Security;
 
@@ -86,9 +87,11 @@ public class AbstractChatServlet extends HttpServlet {
 		//return Security.hash(Security.decryptRSA((String) getAttrib(req,Constants.PW_FIELD),req.getSession().getId()));
 	}
 	public String getHash(String rsaEncrypted, HttpSession session) {
-		return Security.hash(Security.decryptRSA(rsaEncrypted,session.getId()));
+		return Security.hash(
+				Security.decryptRSA(rsaEncrypted,session.getId()));
 	}
 	public boolean isAdmin(String user) {
+		
 		return getChatData().isAdmin(user);
 	}
 	public void setAdmin(String user) {

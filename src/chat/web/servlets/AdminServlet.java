@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import chat.utils.ChatProperties;
 import chat.utils.Constants;
 
 /**
@@ -21,11 +22,13 @@ public class AdminServlet extends AbstractChatServlet {
 			return;
 		}
 		String user=(String)getAttrib(req, Constants.UNAME_FIELD);
-		if (isAdmin(user)) {
-			unsetAdmin(user);
-		}
-		else {
-			setAdmin(user);
+		if (ChatProperties.isAdminAllowed()&&ChatProperties.isAdminChangeAllowed()) {
+			if (isAdmin(user)) {
+				unsetAdmin(user);
+			}
+			else {
+				setAdmin(user);
+			}
 		}
 		resp.sendRedirect(getServletContext().getContextPath()+"/Chat");
 		

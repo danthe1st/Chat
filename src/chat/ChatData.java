@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,9 +20,8 @@ import chat.utils.ChatProperties;
 import chat.utils.Constants;
 import chat.utils.XMLController;
 
-public class ChatData implements Serializable{
+public class ChatData{
 	
-	private static final long serialVersionUID = 3936673390222352563L;
 	private Map<String, UserData> usersLoggedIn = new HashMap<String, UserData>();
 	private Map<String, Chatroom> activeChats;
 	private List<String> bannedIPs=new ArrayList<>();

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import chat.ChatData;
 import chat.utils.Constants;
-import chat.utils.SHA;
+import chat.utils.Security;
 
 public class AbstractChatServlet extends HttpServlet {
 	
@@ -82,8 +82,11 @@ public class AbstractChatServlet extends HttpServlet {
 //
 //	}
 	public String getPasswordHash(HttpServletRequest req) {
-		return SHA.hash((String) getAttrib(req,Constants.PW_FIELD));
-
+		return getHash((String) getAttrib(req,Constants.PW_FIELD), req.getSession());
+		//return Security.hash(Security.decryptRSA((String) getAttrib(req,Constants.PW_FIELD),req.getSession().getId()));
+	}
+	public String getHash(String rsaEncrypted, HttpSession session) {
+		return Security.hash(Security.decryptRSA(rsaEncrypted,session.getId()));
 	}
 	public boolean isAdmin(String user) {
 		return getChatData().isAdmin(user);
@@ -149,7 +152,7 @@ public class AbstractChatServlet extends HttpServlet {
 		if (hasUser(username)) {
 			return login(req);
 		}
-		String pwConfHash=SHA.hash(((String)getAttrib(req,  Constants.PW_CONFIRM_FIELD)));
+		String pwConfHash=getHash((String)getAttrib(req,  Constants.PW_CONFIRM_FIELD), req.getSession());
 		getChatData().registerUser(username, pwHash,pwConfHash,req.getRemoteAddr());
 		getSession(req).setAttribute(Constants.UNAME_FIELD, username);		
 		return true;

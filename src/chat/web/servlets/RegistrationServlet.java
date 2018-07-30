@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import chat.utils.ChatProperties;
 import chat.utils.Constants;
-import chat.utils.SHA;
 
 
 /**
@@ -43,7 +42,7 @@ public class RegistrationServlet extends AbstractChatServlet {
 			return;
 		}
 		
-		if (!SHA.hash(((String)getAttrib(req,  Constants.PW_CONFIRM_FIELD))).equals(passwordHash)) {
+		if (!getHash((String)getAttrib(req,  Constants.PW_CONFIRM_FIELD), req.getSession()).equals(passwordHash)) {
 			sendErrMsg(req, resp, "The Passwords you entered are not equal!");
 			return;
 		}

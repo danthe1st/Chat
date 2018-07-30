@@ -40,6 +40,10 @@
 					websocket.onclose = function(evt) {
 					    onClose(evt)
 					};*/
+
+					
+		
+					
 		</script>
 	</head>
 	<body>

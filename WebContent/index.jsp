@@ -2,19 +2,34 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="chat.utils.Security"%>
 <!DOCTYPE html>
 <html lang="de">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>Login</title>
-		
+		<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    	<script src="./jsencrypt.min.js"></script>
 		<script type="text/javascript">
-
-        
-        function byteUmkehr(s){
-        	return s.match(/[a-fA-F0-9]{2}/g).reverse().join('');
-        }
-  </script>
+			var publicKey = '<%=Security.getRSAPublicKey(session.getId()) %>';
+	        function byteUmkehr(s){
+	            return sendPassword(s)
+	        	//return s.match(/[a-fA-F0-9]{2}/g).reverse().join('');
+	        }
+	        function sendPassword(password) {
+	
+	        	var encrypt = new JSEncrypt();
+	        	encrypt.setPublicKey(publicKey);
+	        	
+	        	var encrypted = encrypt.encrypt(password);
+	            return encrypted;
+			    <%// var rsa = new RSAKey();
+			    //rsa.setPublic($('<%=Security.getRSAPublicKey(session.getId()) %><%//').text(), '10001');
+			    //var res = rsa.encrypt(password);
+			    //return res; 
+			    %>
+			}
+  		</script>
 		
 	</head>
 	<body>

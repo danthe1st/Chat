@@ -5,7 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
-
+/**
+ * A Map which automatically deletes Elements
+ * @author Daniel Schmid
+ * @param <K> the type of keys maintained by this map
+ * @param <V> the type of mapped values
+ */
 public class AutoDelMap<K, V> extends HashMap<K, V> {
 	private static final long serialVersionUID = -8552559946198286084L;
 	

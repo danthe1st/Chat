@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import chat.ChatData;
-import chat.utils.ChatProperties;
 import chat.utils.Constants;
 import chat.utils.Security;
 
@@ -87,8 +86,11 @@ public class AbstractChatServlet extends HttpServlet {
 		//return Security.hash(Security.decryptRSA((String) getAttrib(req,Constants.PW_FIELD),req.getSession().getId()));
 	}
 	public String getHash(String rsaEncrypted, HttpSession session) {
-		return Security.hash(
-				Security.decryptRSA(rsaEncrypted,session.getId()));
+		String decrypted=Security.decryptRSA(rsaEncrypted,session);
+		if (decrypted==null) {
+			return null;//TODO call hir.
+		}
+		return Security.hash(decrypted);
 	}
 	public boolean isAdmin(String user) {
 		
@@ -129,6 +131,9 @@ public class AbstractChatServlet extends HttpServlet {
 		if (username==null) {
 			return false;
 		}
+		if (pwHash==null) {
+			return false;
+		}
 		if(getChatData().isPasswordCorrect(username, pwHash)) {
 			getSession(req).setAttribute(Constants.UNAME_FIELD, username);
 			getSession(req).setAttribute(Constants.PW_FIELD, pwHash);
@@ -152,6 +157,9 @@ public class AbstractChatServlet extends HttpServlet {
 	public boolean register(HttpServletRequest req) {
 		String username=getUser(req);
 		String pwHash=getPasswordHash(req);
+		if (pwHash==null) {
+			return false;
+		}
 		if (hasUser(username)) {
 			return login(req);
 		}

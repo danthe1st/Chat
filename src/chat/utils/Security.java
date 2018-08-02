@@ -9,38 +9,44 @@ import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.servlet.http.HttpSession;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
-
 public class Security {
-
+	private static final String ATTRIB_KEYPAIR="keyPair";
 	public static String hash(String toHash) {
 		MessageDigest digest;
 		try {
 			digest = MessageDigest.getInstance("SHA-256");
 			byte[] encodedhash = digest.digest(
 					toHash.getBytes(StandardCharsets.UTF_8));
-			return stripNonValidXMLCharacters(new String(encodedhash));
+			BASE64Encoder encoder = new BASE64Encoder();
+			return encoder.encode(encodedhash).replaceAll("\r", "").replaceAll("\n", "");
 		} catch (NoSuchAlgorithmException e) {}
 		return null;
 	}
-	private static String stripNonValidXMLCharacters(String in) {      
-	    return in.replaceAll("[\\uD83D\\uFFFD\\uFE0F\\u203C\\u3010\\u3011\\u300A\\u166D\\u200C\\u202A\\u202C\\u2049\\u20E3\\u300B\\u300C\\u3030\\u065F\\u0099\\u0F3A\\u0F3B\\uF610\\uFFFC]", "").replaceAll("[^\\u0009\\u000a\\u000d\\u0020-\\uD7FF\\uE000-\\uFFFD]", "");
+	private static KeyPair getKeyPair(HttpSession session){
+		KeyPair keyPairs=null;
+		if (session.getAttribute(ATTRIB_KEYPAIR)==null) {
+			return null;
+		}
+		else {
+			keyPairs=(KeyPair) session.getAttribute(ATTRIB_KEYPAIR);
+		}
+		return keyPairs;
 	}
-	
-	private static Map<String,KeyPair> keyPairs=new HashMap<>();
-	public static String getRSAPublicKey(String sessionID) {
+	public static String getRSAPublicKey(HttpSession session) {
+		KeyPair keyPairs=null;
+		keyPairs=getKeyPair(session);
 		Key publicKey;
-		if (!keyPairs.containsKey(sessionID)) {
+		if (keyPairs==null) {
 			KeyPair kp=null;
 		    try {
 		    	KeyPairGenerator kpg;
@@ -53,33 +59,21 @@ public class Security {
 			if (kp==null) {
 				return null;
 			}
-		    keyPairs.put(sessionID, kp);
-			// receiving public key from where you store it
+			session.setAttribute(ATTRIB_KEYPAIR, kp);
 		    publicKey = kp.getPublic();
 		}
 		else {
-			publicKey=keyPairs.get(sessionID).getPublic();
+			publicKey=getKeyPair(session).getPublic();
 		}
 		BASE64Encoder encoder = new BASE64Encoder();
 		return encoder.encode(publicKey.getEncoded()).replaceAll("\r", "").replaceAll("\n", "");
-//	    KeyFactory fact;
-//	    // initializing public key variable
-//	    RSAPublicKeySpec pub = new RSAPublicKeySpec(BigInteger.ZERO, BigInteger.ZERO);
-//	    try {
-//	        fact = KeyFactory.getInstance("RSA");
-//	        pub = fact.getKeySpec(publicKey, RSAPublicKeySpec.class);
-//	    } catch(NoSuchAlgorithmException e1) {
-//	    } catch(InvalidKeySpecException e) {
-//	    }
-//	    
-//	    
-//	// now you should pass Modulus string onto your html(jsp) in such way
-//	    
-//	return pub.getModulus().toString(10);
-	// send somehow this String to page, so javascript can use it
 	}
-	public static String decryptRSA(String encrypted,String sessionID) {
-		PrivateKey priKey=keyPairs.get(sessionID).getPrivate();
+	public static String decryptRSA(String encrypted,HttpSession session) {
+		KeyPair kp=getKeyPair(session);
+		if (kp==null) {
+			return null;
+		}
+		PrivateKey priKey=kp.getPrivate();
 		try {
 			Cipher cipher = Cipher.getInstance("RSA");  
 	        cipher.init(Cipher.DECRYPT_MODE, priKey);//vllt Cipher.DECRYPT_MODE

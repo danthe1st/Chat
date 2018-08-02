@@ -11,7 +11,7 @@
 		<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
     	<script src="./jsencrypt.min.js"></script>
 		<script type="text/javascript">
-			var publicKey = '<%=Security.getRSAPublicKey(session.getId()) %>';
+			var publicKey = '<%=Security.getRSAPublicKey(session) %>';
 	        function byteUmkehr(s){
 	            return sendPassword(s)
 	        	//return s.match(/[a-fA-F0-9]{2}/g).reverse().join('');

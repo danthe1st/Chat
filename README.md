@@ -1,2 +1,2 @@
 # Chat
-a small Web-Chat Based on Java-Servlets
+a small Web-Chat based on Java-Servlets

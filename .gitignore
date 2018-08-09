@@ -1,0 +1,7 @@
+#eclipse stuff
+.settings/
+.classpath
+.project
+.tern-project
+#maven stuff
+target/

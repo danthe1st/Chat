@@ -25,7 +25,7 @@ public class DelMsgServlet extends AbstractChatServlet {
     		resp.sendRedirect(req.getServletContext().getContextPath()+"/Chat");
     		return;
 		}
-    	if (!isManeger(req)) {
+    	if (!isManager(req)) {
 			return;
 		}
     	Object oMSGId= getAttrib(req, Constants.MSG_ID);

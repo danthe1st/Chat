@@ -36,8 +36,13 @@ public class RegistrationServlet extends AbstractChatServlet {
 			sendErrMsg(req, resp, "Please enter a password!");
 			return;
 		}
-		
-		if (!getHash(user, (String)getAttrib(req,  Constants.PW_CONFIRM_FIELD), req.getSession()).equals(passwordHash)) {
+		String pwConfHash=getHash(user, (String)getAttrib(req,  Constants.PW_CONFIRM_FIELD), req.getSession());
+		if (pwConfHash==null||pwConfHash.equals("")) {
+			sendErrMsg(req, resp, "Please enter a the password into the password confirmed field too!");
+			return;
+		}
+			
+		if (!pwConfHash.equals(passwordHash)) {
 			sendErrMsg(req, resp, "The Passwords you entered are not equal!");
 			return;
 		}

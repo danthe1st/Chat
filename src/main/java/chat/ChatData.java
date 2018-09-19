@@ -26,7 +26,7 @@ import chat.utils.XMLController;
 public class ChatData{
 	
 	private Map<String, UserData> usersLoggedIn = new HashMap<String, UserData>();
-	private Map<String, Chatroom> activeChats;
+	private Map<String, ChatRoom> activeChats;
 	private List<String> bannedIPs=new ArrayList<>();
 	private static final String chatsDir="chats/";
 	private static final String usersDir="users/";
@@ -43,7 +43,7 @@ public class ChatData{
 	 * resets/initializes all the Chats
 	 */
 	private void resetActiveChats() {
-		AutoDelMap<String, Chatroom> activeChats=new AutoDelMap<>(ChatProperties.getMaxChatsCached());
+		AutoDelMap<String, ChatRoom> activeChats=new AutoDelMap<>(ChatProperties.getMaxChatsCached());
 		activeChats.setOnRemove((k,v)->{saveChat(k, v);});
 		this.activeChats=activeChats;
 	}
@@ -115,7 +115,6 @@ public class ChatData{
 		if (!userDir.exists()) {
 			userDir.mkdirs();
 		}
-//		save(usersDir+"/"+username+userSuffix,user);
 		XMLController.saveUser(user, new File(pathname+"/"+usersDir+"/"+username+".xml"));
 	}
 	/**
@@ -156,7 +155,6 @@ public class ChatData{
 			}
 			System.out.println("User unregistered: "+username);
 		}
-		//saveUsers();
 	}
 	/**
 	 * checks if a user is logged in or not
@@ -369,7 +367,6 @@ public class ChatData{
 	}
 	/**
 	 * renews the time of the last Message<br>
-	 * 
 	 * @param user
 	 * @return true if the last Message was sent greater than {@link ChatProperties#getRefreshTime()}, else false
 	 */
@@ -396,7 +393,7 @@ public class ChatData{
 	 * @param name the name of the Chat
 	 * @return the Chat represented as {@link ChatData}
 	 */
-	public Chatroom getChat(String name) {
+	public ChatRoom getChat(String name) {
 		if (activeChats.containsKey(name)) {
 			return activeChats.get(name);
 		}
@@ -408,16 +405,15 @@ public class ChatData{
 	 * @param name the name of the Chat
 	 * @return the created Chat
 	 */
-	public Chatroom createChat(String name) {
-		Chatroom chat=getChat(name);
+	public ChatRoom createChat(String name) {
+		ChatRoom chat=getChat(name);
 		if(chat!=null) {
 			return chat;
 		}
-		chat=new Chatroom();
+		chat=new ChatRoom();
 		activeChats.put(name, chat);
 		saveChat(name, chat);
 		System.out.println("Chat created: "+name);
-		//saveChats();
 		return chat;
 	}
 	/**
@@ -482,16 +478,32 @@ public class ChatData{
 		}
 		return chats;
 	}
-	
-	
+	/**
+	 * checks if a message ends with one or more spaces
+	 * @param text the message
+	 * @return <code>true</code> if the message ends with at least one space
+	 */
 	public static boolean endsWithSpaces(String text) {
 		return text.endsWith(" ");
 	}
-	
+	/**
+	 * clears the ChatData
+	 */
 	private void clearData() {
 		activeChats.clear();
+		if (!usersLoggedIn.isEmpty()) {
+			Set<String> users=new HashSet<>();
+			usersLoggedIn.forEach((k,v)->{
+				users.add(k);
+			});
+			for (String user : users) {
+				logout(user);
+			}
+		}
 	}
-	
+	/**
+	 * loads the banned IP-Adresses
+	 */
 	@SuppressWarnings("unchecked")
 	private void loadBannedIPs() {
 		List<String> ips = null;
@@ -504,37 +516,58 @@ public class ChatData{
 		}
 		bannedIPs=ips;
 	}
+	/**
+	 * saves the banned IP-Adresses
+	 */
 	private void saveBannedIPs() {
 		save("IPs.dat",bannedIPs);
 	}
-	
-	
-	private Chatroom loadChat(String name) {
-		Chatroom chat=(Chatroom)load(chatsDir+name+chatsSuffix);
+	/**
+	 * loads a Chatroom
+	 * @param name the name of the Chatroom
+	 * @return the {@link ChatRoom} representation
+	 */
+	private ChatRoom loadChat(String name) {
+		ChatRoom chat=(ChatRoom)load(chatsDir+name+chatsSuffix);
 		if (chat==null) {
 			return null;
 		}
 		activeChats.put(name, chat);
 		return chat;
 	}
-	public void saveChat(String name,Chatroom chat) {
+	/**
+	 * saves a Chat
+	 * @param name the name of the Chat
+	 * @param chat the {@link ChatRoom} representation of the Chat
+	 */
+	public void saveChat(String name,ChatRoom chat) {
 		File file=new File(pathname+"/"+chatsDir);
 		if (!file.exists()) {
 			file.mkdirs();
 		}
 		save(chatsDir+name+chatsSuffix, chat);
 	}
+	/**
+	 * saves all cached Chats
+	 */
 	public void saveChats() {
 		activeChats.forEach((name,chat)->{
 			saveChat(name, chat);
 		});
 	}
-	
+	/**
+	 * saves all users logged in
+	 */
 	public void saveUsers() {
 		usersLoggedIn.forEach((username,userdata)->{
 			saveUser(username, userdata);
 		});
 	}
+	/**
+	 * saves an Object
+	 * @param filepath the path to be saved
+	 * @param toSave
+	 */
 	private void save(String filepath, Object toSave) {
 		try {
 			File path=new File(pathname);
@@ -559,6 +592,11 @@ public class ChatData{
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * loads an Object
+	 * @param filepath the path from the Object
+	 * @return the loaded Object or <code>null</code>
+	 */
 	private Object load(String filepath) {
 		try {
 			File file=new File(pathname+"/"+filepath);
@@ -574,8 +612,4 @@ public class ChatData{
 		}
 		return null;
 	}
-
-	
-
-	
 }

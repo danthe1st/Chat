@@ -26,7 +26,7 @@ public class DelChatServlet extends AbstractChatServlet implements Servlet {
     		resp.sendRedirect(req.getServletContext().getContextPath()+"/Chat");
     		return;
 		}
-    	if (!isManeger(req)) {
+    	if (!isManager(req)) {
 			return;
 		}
     	Object oChatId= getAttrib(req, Constants.CHAT_ID);

@@ -89,12 +89,7 @@
 			/>
 			
 		</form>	
-	
-	
 		<c:if test="${requestScope.chat!=null}">
-			
-		
-		
 			<div id="ChatDiv" > <div>
 			<h2><c:out value="${requestScope.chat}" escapeXml="true"/> </h2>
 			<c:if test="${sessionScope.manager}">
@@ -108,13 +103,11 @@
 			<form action="./writeMsg" method="post">
 				<label for="msgName" title="Name der Nachricht:">Name der Nachricht:</label>
 				<input type="hidden" name="name" value="${requestScope.chat}" />
-				
 				<input name="msg" id="msgName" autocomplete="off"
 				   onkeyup="InitializeTimer(
 				  ${ChatProperties.getRefreshTime()}
 				  )">
 				<input type="submit" name="createChat" value="Senden"/>
-				
 			</form>
 			<c:if test="${ChatProperties.isFilesAllowed()}">
 				<form action="./Upload" method="post"  enctype="multipart/form-data">
@@ -133,15 +126,10 @@
 						<c:set var="chat1"  value="${applicationScope.CHAT_DATA.getChat(chat)}"/>
 								<c:forEach var="msg" items="${chat1.getMsgs()}">
 								<tr>
-									
 									<td>
-									
 									<c:if test="${msg.getLink()!=null}">
 										<c:set var="ending" value="${msg.getLink().split('.')}" />
-										
-										
 										<c:set var="link" value="${msg.getLink()}"/>
-										
 										<a href="${link}" target="_blank">
 									</c:if>
 									<c:out value="${msg.getMsg()}" escapeXml="true"/>
@@ -152,7 +140,6 @@
 										<c:set var="link" value="${msg.getLink()}"/>
 										</a>
 									</c:if>
-									
 									</td>
 										<c:if test="${sessionScope.manager}"><td>
 											<input type="submit" value="Nachricht löschen" id="button-2" onclick="

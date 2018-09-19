@@ -24,7 +24,7 @@ public class ManagerServlet extends AbstractChatServlet {
     		resp.sendRedirect(req.getServletContext().getContextPath()+"/Chat");
     		return;
 		}
-    	boolean isManager=isManeger(req);
+    	boolean isManager=isManager(req);
     	if (isManager) {
     		getSession(req).setAttribute(Constants.MANAGER_FIELD, false);
 		}

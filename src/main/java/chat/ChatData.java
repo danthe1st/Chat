@@ -207,10 +207,13 @@ public class ChatData{
 		for (String string : usersLoggedIn.keySet()) {
 			allUsers.add(string); 
 		}
-		for (String filename : new File(pathname+"/"+usersDir).list()) {
-			if (filename.endsWith(userSuffix)) {
-				String chatname=filename.substring(0, filename.lastIndexOf(userSuffix));
-				allUsers.add(chatname);
+		String[] names=new File(pathname+"/"+usersDir).list();
+		if (names!=null) {
+			for (String filename : names) {
+				if (filename.endsWith(userSuffix)) {
+					String chatname=filename.substring(0, filename.lastIndexOf(userSuffix));
+					allUsers.add(chatname);
+				}
 			}
 		}
 		return allUsers;
@@ -425,7 +428,11 @@ public class ChatData{
 		
 		File chatsDir=new File(pathname+"/"+ChatData.chatsDir);
 		int num=0;
-		for (String dir : chatsDir.list()) {
+		String[] chatFiles=chatsDir.list();
+		if (chatFiles==null) {
+			return true;
+		}
+		for (String dir : chatFiles) {
 			if (dir.endsWith(chatsSuffix)) {
 				num++;
 			}
@@ -464,10 +471,13 @@ public class ChatData{
 		for (String string : activeChats.keySet()) {
 			chats.add(string);
 		}
-		for (String filename : new File(pathname+"/"+chatsDir).list()) {
-			if (filename.endsWith(chatsSuffix)) {
-				String chatname=filename.substring(0, filename.lastIndexOf(chatsSuffix));
-				chats.add(chatname);
+		String[] chatnames=new File(pathname+"/"+chatsDir).list();
+		if (chatnames!=null) {
+			for (String filename : chatnames) {
+				if (filename.endsWith(chatsSuffix)) {
+					String chatname=filename.substring(0, filename.lastIndexOf(chatsSuffix));
+					chats.add(chatname);
+				}
 			}
 		}
 		return chats;

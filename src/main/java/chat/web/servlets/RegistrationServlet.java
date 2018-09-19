@@ -37,7 +37,7 @@ public class RegistrationServlet extends AbstractChatServlet {
 			return;
 		}
 		
-		if (!getHash((String)getAttrib(req,  Constants.PW_CONFIRM_FIELD), req.getSession()).equals(passwordHash)) {
+		if (!getHash(user, (String)getAttrib(req,  Constants.PW_CONFIRM_FIELD), req.getSession()).equals(passwordHash)) {
 			sendErrMsg(req, resp, "The Passwords you entered are not equal!");
 			return;
 		}

@@ -75,22 +75,16 @@ public class AbstractChatServlet extends HttpServlet {
 		String user=(String) getAttrib(req,Constants.UNAME_FIELD);
 		return user;
 	}
-//	public int getPasswordHash(HttpServletRequest req) {
-//		int pwHash=((String) getAttrib(req,Constants.PW_FIELD)).hashCode();
-//		
-//		return pwHash;
-//
-//	}
 	public String getPasswordHash(HttpServletRequest req) {
-		return getHash((String) getAttrib(req,Constants.PW_FIELD), req.getSession());
+		return getHash(getUser(req), (String) getAttrib(req,Constants.PW_FIELD), req.getSession());
 		//return Security.hash(Security.decryptRSA((String) getAttrib(req,Constants.PW_FIELD),req.getSession().getId()));
 	}
-	public String getHash(String rsaEncrypted, HttpSession session) {
+	public String getHash(String username, String rsaEncrypted, HttpSession session) {
 		String decrypted=Security.decryptRSA(rsaEncrypted,session);
 		if (decrypted==null) {
 			return null;
 		}
-		return Security.hash(decrypted);
+		return Security.hash(decrypted+username);
 	}
 	public boolean isAdmin(String user) {
 		
@@ -163,7 +157,7 @@ public class AbstractChatServlet extends HttpServlet {
 		if (hasUser(username)) {
 			return login(req);
 		}
-		String pwConfHash=getHash((String)getAttrib(req,  Constants.PW_CONFIRM_FIELD), req.getSession());
+		String pwConfHash=getHash(getUser(req), (String)getAttrib(req,  Constants.PW_CONFIRM_FIELD), req.getSession());
 		getChatData().registerUser(username, pwHash,pwConfHash,req.getRemoteAddr());
 		getSession(req).setAttribute(Constants.UNAME_FIELD, username);		
 		return true;

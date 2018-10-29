@@ -14,5 +14,5 @@ if "x%var%"=="x" (
 
 git commit -m "%var%"
 git push -u origin --all -f
-git remote remove origin
+:: git remote remove origin
 pause>nul

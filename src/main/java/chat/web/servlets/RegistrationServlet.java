@@ -17,7 +17,7 @@ import chat.utils.Constants;
 public class RegistrationServlet extends AbstractChatServlet {
 	private static final long serialVersionUID = 1L;
 	@Override
-	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		if (isBanned(req.getRemoteAddr())) {
 			sendBanMsg(req, resp);
 			return;

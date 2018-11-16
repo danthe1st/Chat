@@ -18,7 +18,7 @@ public class DelChatServlet extends AbstractChatServlet implements Servlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		if (!assertUserPresent(req, resp)) {
 			return;
 		}

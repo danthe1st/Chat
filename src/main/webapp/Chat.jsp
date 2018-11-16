@@ -93,7 +93,7 @@
 			<div id="ChatDiv" > <div>
 			<h2><c:out value="${requestScope.chat}" escapeXml="true"/> </h2>
 			<c:if test="${sessionScope.manager}">
-				<form action="./DelChat">
+				<form action="./DelChat" method="post">
 					<input type="hidden" name="${Constants.CHAT_ID }" id="delChatHidden"/>
 					<input type="submit" name="${Constants.CHAT_ID }" value="löschen" id="button-1"
 					onclick="document.getElementById('delChatHidden').value = '${requestScope.chat}';"/>
@@ -118,7 +118,7 @@
 				</form>
 			</c:if>
 			<hr>
-			<form action="./DelMsg">
+			<form action="./DelMsg" method="post">
 				<input type="hidden" name="${Constants.MSG_ID }" value="Submit" id="delMsgHidden"/>
 				<input type="hidden" name="${Constants.CHAT_ID }" value="Submit" id="delMsgChatHidden"/>
 				<table id="table-1">
@@ -160,10 +160,10 @@
 		
 		<aside>
 		<div><b>Username: </b><i>${sessionScope.user }</i>
-		<form action="./logout"><input type="submit" name="logout" value="Logout"/></form>
+		<form action="./logout" method="post"><input type="submit" name="logout" value="Logout"/></form>
 		<c:set var="chatData" value="<%=this.getServletContext().getAttribute(Constants.attributeChatData)%>"/>
 		<c:if test="${chatData.isAdmin(sessionScope.user)}">
-			<form action="./Manager"><input type="submit" name="Manager" value="get Manager Mode"/></form>
+			<form action="./Manager" method="post"><input type="submit" name="Manager" value="get Manager Mode"/></form>
 		</c:if>
 		</div>
 		<b>eingeloggte Benutzer:</b><br>
@@ -191,11 +191,11 @@
 				<c:forEach var="username" items="${applicationScope.CHAT_DATA.getAllUsernames()}"><tr>
 					<td><c:set var="chatData" value="<%=this.getServletContext().getAttribute(Constants.attributeChatData)%>"></c:set>
 					<span><c:out value="${username}" escapeXml="true"/></span></td>
-						<td><form action="./delUser">
+						<td><form action="./delUser" method="post">
 							<input type="hidden" name="<%=Constants.UNAME_DEL_FIELD%>" value="null" id="delUF_${username}">
 							<input type="submit" name="_" value="löschen" id="kick_${ username}" onclick="document.getElementById('delUF_${ username}').value = '${ username}';">
 						</form></td>
-						<td><form action="./ban">
+						<td><form action="./ban" method="post">
 							<input type="hidden" name="<%=Constants.BAN_FIELD%>" value="null" id="banUF_${username}">
 							<input type="submit" name="_" value="ban" id="ban_${ username}" onclick="document.getElementById('banUF_${ username}').value = '${ username}';">
 						</form></td>

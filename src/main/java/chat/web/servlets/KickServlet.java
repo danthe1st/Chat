@@ -17,7 +17,7 @@ public class KickServlet extends AbstractChatServlet {
 	private static final long serialVersionUID = 1L;
        
 	@Override
-	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		if (!assertUserPresent(req, resp)) {
 			return;
 		}

@@ -8,7 +8,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>Login</title>
-		<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+		
     	<script src="./jsencrypt.min.js"></script>
 		<script type="text/javascript">
 			var publicKey = '<%=Security.getRSAPublicKey(session) %>';
